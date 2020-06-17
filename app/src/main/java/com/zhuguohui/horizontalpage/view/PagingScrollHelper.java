@@ -7,10 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ScrollView;
+
+import com.zhuguohui.horizontalpage.R;
 
 /**
  * 实现RecycleView分页滚动的工具类
- * Created by zhuguohui on 2016/11/10.
  */
 
 public class PagingScrollHelper {
@@ -82,13 +84,12 @@ public class PagingScrollHelper {
             if (mOrientation == ORIENTATION.VERTICAL && mRecyclerView.computeVerticalScrollExtent() != 0) {
                 return mRecyclerView.computeVerticalScrollRange() / mRecyclerView.computeVerticalScrollExtent();
             } else if (mRecyclerView.computeHorizontalScrollExtent() != 0) {
-                Log.i("zzz","rang="+mRecyclerView.computeHorizontalScrollRange()+" extent="+mRecyclerView.computeHorizontalScrollExtent());
+                Log.i("zzz", "rang=" + mRecyclerView.computeHorizontalScrollRange() + " extent=" + mRecyclerView.computeHorizontalScrollExtent());
                 return mRecyclerView.computeHorizontalScrollRange() / mRecyclerView.computeHorizontalScrollExtent();
             }
         }
         return 0;
     }
-
 
 
     ValueAnimator mAnimator = null;
@@ -115,6 +116,7 @@ public class PagingScrollHelper {
 
         @Override
         public boolean onFling(int velocityX, int velocityY) {
+            before = 0;
             if (mOrientation == ORIENTATION.NULL) {
                 return false;
             }
@@ -128,7 +130,6 @@ public class PagingScrollHelper {
             //如果是垂直方向
             if (mOrientation == ORIENTATION.VERTICAL) {
                 startPoint = offsetY;
-
                 if (velocityY < 0) {
                     p--;
                 } else if (velocityY > 0) {
@@ -148,6 +149,8 @@ public class PagingScrollHelper {
                 endPoint = p * mRecyclerView.getWidth();
 
             }
+
+            Log.e("===","===========startPoint=="+startPoint+"==="+endPoint);
             if (endPoint < 0) {
                 endPoint = 0;
             }
@@ -161,7 +164,6 @@ public class PagingScrollHelper {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
                         int nowPoint = (int) animation.getAnimatedValue();
-
                         if (mOrientation == ORIENTATION.VERTICAL) {
                             int dy = nowPoint - offsetY;
                             //这里通过RecyclerView的scrollBy方法实现滚动。
@@ -209,8 +211,11 @@ public class PagingScrollHelper {
                     move = absY > recyclerView.getHeight() / 2;
                     vY = 0;
 
+//                    Log.e("===","============recyclerView.getHeight()=="+recyclerView.getChildViewHolder());
                     if (move) {
-                        vY = offsetY - startY < 0 ? -1000 : 1000;
+
+//                        vY = offsetY - startY < 0 ? -( recyclerView.getHeight()-(scrollView.getHeight()-recyclerView.getHeight())) : recyclerView.getHeight()-(scrollView.getHeight()-recyclerView.getHeight());
+                        vY = offsetY - startY < 0 ? -recyclerView.getHeight() : recyclerView.getHeight();
                     }
 
                 } else {
@@ -221,8 +226,14 @@ public class PagingScrollHelper {
                     }
 
                 }
-
                 mOnFlingListener.onFling(vX, vY);
+                if (recyclerView.getChildCount() > 0) {
+                    MyScrollView scrollView = (MyScrollView) recyclerView.getChildAt(0).findViewById(R.id.scroll);
+                    scrollView.setScrolledToTop(false);
+                    scrollView.setScrolledToBottom(false);
+//                            scrollView.scrollTo(0,0);
+                    scrollView.smoothScrollTo(0, 0);
+                }
 
             }
 
@@ -239,11 +250,61 @@ public class PagingScrollHelper {
     private MyOnTouchListener mOnTouchListener = new MyOnTouchListener();
 
     private boolean firstTouch = true;
+    private double before;
+    private boolean isScrolledToBottom;
+    private boolean isScrolledToTop;
 
     public class MyOnTouchListener implements View.OnTouchListener {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            boolean disallow = false;
+            MyScrollView scrollView = (MyScrollView) v.findViewById(R.id.scroll);
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    startX = (int) event.getX();
+                    startY = (int) event.getY();
+                    disallow = true;
+                    isScrolledToTop = scrollView.isScrolledToTop();
+                    isScrolledToBottom = scrollView.isScrolledToBottom();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    int endX = (int) event.getX();
+                    int endY = (int) event.getY();
+                    int disX = Math.abs(endX - startX);
+                    int disY = Math.abs(endY - startY);
+                    if (disX > disY) {
+                        disallow = true;
+                    } else {
+                        disallow = false;
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    disallow = false;
+//                    isScrolledToTop = false;
+//                    isScrolledToBottom = false;
+//                    scrollView.setScrolledToBottom(false);
+//                    scrollView.setScrolledToTop(false);
+                    break;
+            }
+            ((RecyclerView) v).requestDisallowInterceptTouchEvent(disallow);
+
+            if (before == 0) {
+                before = event.getY();
+            }
+            double yDistance = event.getY() - before;
+
+
+            Log.e("===", "===============" +isScrolledToTop + "==" + isScrolledToBottom + "====" + scrollView.getHeight());
+            if (disallow) {
+                scrollView.findViewById(R.id.rv).dispatchTouchEvent(event);
+            }
+            if (!isScrolledToTop && !isScrolledToBottom) {
+                return scrollView.onTouchEvent(event);
+            }
+
+
             //手指按下的时候记录开始滚动的坐标
             if (firstTouch) {
                 //第一次touch可能是ACTION_MOVE或ACTION_DOWN,所以使用这种方式判断
@@ -254,6 +315,7 @@ public class PagingScrollHelper {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 firstTouch = true;
             }
+
 
             return false;
         }

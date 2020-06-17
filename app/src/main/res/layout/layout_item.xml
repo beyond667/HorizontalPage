@@ -1,15 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhuguohui.horizontalpage.view.MyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_item">
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:padding="20dp"
-        android:text="1"
-        android:textSize="20sp" />
-</RelativeLayout>
+        android:orientation="vertical">
+
+
+        <com.yyydjk.library.BannerLayout
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:autoPlayDuration="5000"
+            app:indicatorMargin="0dp"
+            app:indicatorPosition="centerBottom"
+            app:indicatorShape="oval"
+            app:indicatorSpace="0dp"
+            app:scrollDuration="1100"
+            app:selectedIndicatorColor="?attr/colorPrimary"
+            app:selectedIndicatorHeight="0dp"
+            app:selectedIndicatorWidth="0dp"
+            app:unSelectedIndicatorColor="#00ffffff"
+            app:unSelectedIndicatorHeight="0dp"
+            app:unSelectedIndicatorWidth="0dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="1111"
+            android:textSize="20sp" />
+
+
+        <com.zhuguohui.horizontalpage.view.RecyclerViewAtRecycleView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="1111"
+            android:textSize="20sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#660066"/>
+    </LinearLayout>
+</com.zhuguohui.horizontalpage.view.MyScrollView>

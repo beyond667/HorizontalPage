@@ -1,5 +1,6 @@
 package com.zhuguohui.horizontalpage;
 
+import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,13 +19,11 @@ import com.zhuguohui.horizontalpage.view.PageDecorationLastJudge;
 import com.zhuguohui.horizontalpage.view.PagingItemDecoration;
 import com.zhuguohui.horizontalpage.view.PagingScrollHelper;
 
-public class MainActivity extends AppCompatActivity implements PagingScrollHelper.onPageChangeListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements PagingScrollHelper.onPageChangeListener {
     RecyclerView recyclerView;
     MyAdapter myAdapter;
     TextView tv_title;
     PagingScrollHelper scrollHelper = new PagingScrollHelper();
-    RadioGroup rg_layout;
-    Button btnUpdate;
     TextView tv_page_total;
 
     @Override
@@ -32,23 +31,23 @@ public class MainActivity extends AppCompatActivity implements PagingScrollHelpe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        rg_layout = (RadioGroup) findViewById(R.id.rg_layout);
-        rg_layout.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switchLayout(checkedId);
-            }
-        });
+        Rect outSize = new Rect();
+        getWindowManager().getDefaultDisplay().getRectSize(outSize);
+        int left = outSize.left;
+        int top = outSize.top;
+        int right = outSize.right;
+        int bottom = outSize.bottom;
+        Log.d("========", "left = " + left + ",top = " + top + ",right = " + right + ",bottom = " + bottom);
+
+
         tv_title = (TextView) findViewById(R.id.tv_title);
         tv_page_total = (TextView) findViewById(R.id.tv_page_total);
-        btnUpdate = (Button) findViewById(R.id.btn_update);
-        btnUpdate.setOnClickListener(this);
         myAdapter = new MyAdapter();
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setAdapter(myAdapter);
         scrollHelper.setUpRecycleView(recyclerView);
         scrollHelper.setOnPageChangeListener(this);
-        switchLayout(R.id.rb_horizontal_page);
+        switchLayout();
         recyclerView.setHorizontalScrollBarEnabled(true);
         //获取总页数,采用这种方法才能获得正确的页数。否则会因为RecyclerView.State 缓存问题，页数不正确。
         recyclerView.post(new Runnable() {
@@ -80,23 +79,25 @@ public class MainActivity extends AppCompatActivity implements PagingScrollHelpe
 
     }
 
-    private void switchLayout(int checkedId) {
+    private void switchLayout() {
         RecyclerView.LayoutManager layoutManager = null;
         RecyclerView.ItemDecoration itemDecoration = null;
-        switch (checkedId) {
-            case R.id.rb_horizontal_page:
-                layoutManager = horizontalPageLayoutManager;
-                itemDecoration = pagingItemDecoration;
-                break;
-            case R.id.rb_vertical_page:
-                layoutManager = vLinearLayoutManager;
-                itemDecoration = vDividerItemDecoration;
-                break;
-            case R.id.rb_vertical_page2:
-                layoutManager = hLinearLayoutManager;
-                itemDecoration = hDividerItemDecoration;
-                break;
-        }
+//        switch (checkedId) {
+//            case R.id.rb_horizontal_page:
+//                layoutManager = horizontalPageLayoutManager;
+//                itemDecoration = pagingItemDecoration;
+//                break;
+//            case R.id.rb_vertical_page:
+//                layoutManager = vLinearLayoutManager;
+//                itemDecoration = vDividerItemDecoration;
+//                break;
+//            case R.id.rb_vertical_page2:
+//                layoutManager = hLinearLayoutManager;
+//                itemDecoration = hDividerItemDecoration;
+//                break;
+//        }
+        layoutManager = vLinearLayoutManager;
+        itemDecoration = vDividerItemDecoration;
         if (layoutManager != null) {
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.removeItemDecoration(lastItemDecoration);
@@ -119,15 +120,7 @@ public class MainActivity extends AppCompatActivity implements PagingScrollHelpe
     public void onPageChange(int index) {
 
         tv_title.setText("第" + (index + 1) + "页");
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_update:
-                updateData();
-                break;
-        }
+        Log.e("===","=====================第" + (index + 1) + "页");
     }
 
     private void updateData() {

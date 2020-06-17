@@ -5,45 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EEEEEE"
-    android:orientation="vertical"
-    tools:context="com.zhuguohui.horizontalpage.MainActivity">
-
-    <RadioGroup
-        android:id="@+id/rg_layout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/rb_horizontal_page"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:checked="true"
-            android:gravity="center"
-            android:text="横向分页" />
-
-        <RadioButton
-            android:id="@+id/rb_vertical_page"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="纵向分页" />
-
-        <RadioButton
-            android:id="@+id/rb_vertical_page2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="横向分页" />
-
-    </RadioGroup>
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
 
@@ -66,27 +33,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_gravity="center_horizontal" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_update"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="刷新数据" />
-
-
-    </LinearLayout>
 
 </LinearLayout>
