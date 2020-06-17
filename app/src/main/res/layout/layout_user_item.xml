@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhuguohui.horizontalpage.view.MyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhuguohui.horizontalpage.MyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scroll"
     android:layout_width="match_parent"
@@ -39,7 +39,7 @@
             android:textSize="20sp" />
 
 
-        <com.zhuguohui.horizontalpage.view.RecyclerViewAtRecycleView
+        <com.zhuguohui.horizontalpage.RecyclerViewAtRecycleView
             android:id="@+id/rv"
             android:layout_width="match_parent"
             android:layout_height="100dp"/>
@@ -47,7 +47,7 @@
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:gravity="center"
@@ -58,4 +58,4 @@
             android:layout_height="2dp"
             android:background="#660066"/>
     </LinearLayout>
-</com.zhuguohui.horizontalpage.view.MyScrollView>
+</com.zhuguohui.horizontalpage.MyScrollView>

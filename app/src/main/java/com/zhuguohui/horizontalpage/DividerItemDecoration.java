@@ -1,4 +1,4 @@
-package com.zhuguohui.horizontalpage.view;
+package com.zhuguohui.horizontalpage;
 /*
  * Copyright (C) 2014 The Android Open Source Project
  *

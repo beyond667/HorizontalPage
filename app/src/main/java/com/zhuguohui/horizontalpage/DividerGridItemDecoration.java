@@ -1,4 +1,4 @@
-package com.zhuguohui.horizontalpage.view;
+package com.zhuguohui.horizontalpage;
 
 import android.content.Context;
 import android.content.res.TypedArray;

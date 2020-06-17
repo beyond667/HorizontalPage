@@ -1,4 +1,4 @@
-package com.zhuguohui.horizontalpage.view;
+package com.zhuguohui.horizontalpage;
 
 /**
  * Created by zhuguohui on 2016/11/15.

@@ -1,6 +1,5 @@
-package com.zhuguohui.horizontalpage.adapter;
+package com.zhuguohui.horizontalpage;
 
-import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,24 +11,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yyydjk.library.BannerLayout;
-import com.zhuguohui.horizontalpage.R;
-import com.zhuguohui.horizontalpage.view.GlideImageLoader;
-import com.zhuguohui.horizontalpage.view.GlideManage;
-import com.zhuguohui.horizontalpage.view.RecyclerViewAtRecycleView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-/**
- * Created by zhuguohui on 2016/11/8.
- */
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     private static List<String> data = new ArrayList<>();
     private static int data_name = 0;
-//    private Random random = new Random();
 
     public MyAdapter() {
         setData();
@@ -38,13 +28,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.layout_item, parent, false);
+        View view = inflater.inflate(R.layout.layout_user_item, parent, false);
         return new MyViewHolder(view);
     }
 
 
     private void setData() {
-        int size =70;
+        int size = 70;
         for (int i = 1; i <= size; i++) {
             data.add(data_name + "-" + i + "");
         }
@@ -62,51 +52,45 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         });
         holder.scrollView.scrollTo(0, 0);
         List<String> urls = new ArrayList<>();
-        for(int i = 0;i<10;i++){
-            urls.add("https://social-vod.wimift.com/image/default/1DBFBA8C43A845BE9150E3F712B9AAC2-6-2.png");
+        for (int i = 0; i < 10; i++) {
+            urls.add("https://social-vod.wimift.com/image/default/7D9C97DD4F5B4DFE9723474E1BD3A700-6-2.png");
         }
         holder.bannerLayout.setImageLoader(new GlideImageLoader());
         holder.bannerLayout.setViewUrls(urls);
         holder.bannerLayout.setAutoPlay(false);
 
         initChildAdapter(holder.recyclerView);
-//        holder.recyclerView.setAdapter();
     }
 
     private void initChildAdapter(RecyclerViewAtRecycleView recycleView) {
-
-        //     LinearLayoutMannager 是一个布局排列 ， 管理的接口,子类都都需要按照接口的规范来实现。
-
         LinearLayoutManager ms = new LinearLayoutManager(recycleView.getContext());
         ms.setOrientation(LinearLayoutManager.HORIZONTAL);// 设置 recyclerview 布局方式为横向布局
         recycleView.setLayoutManager(ms);
         List<String> urls = new ArrayList<>();
-        for(int i = 0;i<10;i++){
-            urls.add("https://social-vod.wimift.com/image/default/09AD9AD5ADF44B878840168246F32E30-6-2.png");
+        for (int i = 0; i < 10; i++) {
+            urls.add("https://social-vod.wimift.com/image/default/7D9C97DD4F5B4DFE9723474E1BD3A700-6-2.png");
         }
-
-
         ChildAdapter oap = new ChildAdapter(urls);
         recycleView.setAdapter(oap);
     }
 
-    class ChildAdapter extends  RecyclerView.Adapter<MyAdapter.ChildViewHolder>{
-        private List<String > urls;
-        public ChildAdapter( List<String > urls) {
+    class ChildAdapter extends RecyclerView.Adapter<MyAdapter.ChildViewHolder> {
+        private List<String> urls;
+
+        public ChildAdapter(List<String> urls) {
             this.urls = urls;
         }
 
         @Override
         public ChildViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            View view = inflater.inflate(R.layout.layout_child_item, parent, false);
+            View view = inflater.inflate(R.layout.layout_user_child_item, parent, false);
             return new ChildViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(ChildViewHolder holder, int position) {
             final String url = data.get(position);
-//            Glid
             GlideManage.load(holder.iv, url);
         }
 
