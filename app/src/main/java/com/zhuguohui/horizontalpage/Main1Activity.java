@@ -1,49 +1,37 @@
 package com.zhuguohui.horizontalpage;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
-public class MainActivity extends AppCompatActivity implements PagingScrollHelper.onPageChangeListener {
-    RecyclerView recyclerView;
-    MyAdapter myAdapter;
-    PagingScrollHelper scrollHelper = new PagingScrollHelper();
+import java.util.ArrayList;
+import java.util.List;
 
+public class Main1Activity extends AppCompatActivity {
+
+
+
+    private VerticalViewPager verticalViewPager;
+    private final int[] imgSource = { R.drawable.p001, R.drawable.p002, R.drawable.p003, R.drawable.p001, R.drawable.p002, R.drawable.p003
+    ,R.drawable.p001, R.drawable.p002, R.drawable.p003, R.drawable.p001, R.drawable.p002, R.drawable.p003
+    ,R.drawable.p001, R.drawable.p002, R.drawable.p003, R.drawable.p001, R.drawable.p002, R.drawable.p003};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_info_main);
-        init();
-    }
-
-    private LinearLayoutManager vLinearLayoutManager = null;
-    private DividerItemDecoration vDividerItemDecoration = null;
-
-    private void init() {
-        vDividerItemDecoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
-        vLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        myAdapter = new MyAdapter();
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        recyclerView.setAdapter(myAdapter);
-        scrollHelper.setUpRecycleView(recyclerView);
-        scrollHelper.setOnPageChangeListener(this);
-
-        recyclerView.setLayoutManager(vLinearLayoutManager);
-        recyclerView.addItemDecoration(vDividerItemDecoration);
-        scrollHelper.updateLayoutManger();
-        scrollHelper.scrollToPosition(0);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPageChange(int index) {
-        Log.e("===","=====================第" + (index + 1) + "页");
+        setContentView(R.layout.activity_user_info_main1);
+        verticalViewPager = (VerticalViewPager) findViewById(R.id.vertical_viewpager);
+        List<View> viewList = new ArrayList<View>();
+        for (int i = 0; i < imgSource.length; i++) {
+            View view = getLayoutInflater().inflate(R.layout.page_item, verticalViewPager,false);
+            ImageView img = (ImageView) view.findViewById(R.id.iv);
+            img.setImageResource(imgSource[i]);
+            viewList.add(view);
+        }
+        verticalViewPager.setViewList(viewList);
     }
 
 

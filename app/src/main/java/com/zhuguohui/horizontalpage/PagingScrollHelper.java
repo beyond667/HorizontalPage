@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.yyydjk.library.BannerLayout;
+
 /**
  * 实现RecycleView分页滚动的工具类
  */
@@ -207,6 +209,7 @@ public class PagingScrollHelper {
     private MyOnTouchListener mOnTouchListener = new MyOnTouchListener();
 
     private boolean firstTouch = true;
+    private Boolean HOZ;
 
     public class MyOnTouchListener implements View.OnTouchListener {
 
@@ -217,30 +220,43 @@ public class PagingScrollHelper {
                 case MotionEvent.ACTION_DOWN:
                     startX = (int) event.getX();
                     startY = (int) event.getY();
-                    disallow = true;
+                    HOZ = null;
                     break;
                 case MotionEvent.ACTION_MOVE:
                     int endX = (int) event.getX();
                     int endY = (int) event.getY();
                     int disX = Math.abs(endX - startX);
                     int disY = Math.abs(endY - startY);
-
+                    Log.e("===", "==========onTouch111=" + disX+"=="+disY);
+                    if(disX==0&&disY==0){
+                        break;
+                    }
                     if (disX > disY) {
+                        if(HOZ==null){
+                           HOZ = true;
+                        }
+                        HOZ = true;
                         disallow = true;
                     } else {
+                        if(HOZ==null){
+                            HOZ = false;
+                        }
                         disallow = false;
                     }
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     disallow = false;
+                    HOZ = Boolean.FALSE;
                     break;
             }
             ((RecyclerView) v).requestDisallowInterceptTouchEvent(disallow);
             Log.e("===", "==========onTouch=" + disallow);
-            if (disallow) {
+            if (HOZ==null ||HOZ.booleanValue()) {
                 MyScrollView scrollView = (MyScrollView) v.findViewById(R.id.scroll);
-                scrollView.findViewById(R.id.rv).dispatchTouchEvent(event);
+                ((BannerLayout)scrollView.findViewById(R.id.banner)).requestDisallowInterceptTouchEvent(false);
+                scrollView.findViewById(R.id.banner).dispatchTouchEvent(event);
+                return true;
             }
             //手指按下的时候记录开始滚动的坐标
             if (firstTouch) {
